@@ -2,10 +2,10 @@
 // Design: Business Insight Magazine style
 
 export const IMAGES = {
-  hero: "https://d2xsxph8kpxj0f.cloudfront.net/310519663524892688/P22aNGwkPSrmiGXcMauiHq/hero-bg-kD23Hj8AD2yNPs2Lj59Jei.webp",
-  vsBattle: "https://d2xsxph8kpxj0f.cloudfront.net/310519663524892688/P22aNGwkPSrmiGXcMauiHq/vs-battle-4Fnmv2hG9dUVypuKFccYBV.webp",
-  dataInsight: "https://d2xsxph8kpxj0f.cloudfront.net/310519663524892688/P22aNGwkPSrmiGXcMauiHq/data-insight-FeGmy3Siket6SQcgEaFc6L.webp",
-  strategy: "https://d2xsxph8kpxj0f.cloudfront.net/310519663524892688/P22aNGwkPSrmiGXcMauiHq/strategy-bg-JRmPP6cAtG35L5MkfsArtT.webp",
+  hero: "https://d2xsxph8kpxj0f.cloudfront.net/310519663524892688/P22aNGwkPSrmiGXcMauiHq/hero-bg_d7d95dda.png",
+  vsBattle: "https://d2xsxph8kpxj0f.cloudfront.net/310519663524892688/P22aNGwkPSrmiGXcMauiHq/vs-battle_5bda0823.png",
+  dataInsight: "https://d2xsxph8kpxj0f.cloudfront.net/310519663524892688/P22aNGwkPSrmiGXcMauiHq/data-insight_eb8a4218.png",
+  strategy: "https://d2xsxph8kpxj0f.cloudfront.net/310519663524892688/P22aNGwkPSrmiGXcMauiHq/strategy-bg_1f6458b5.png",
 };
 
 export const COLORS = {
