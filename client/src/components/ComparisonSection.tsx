@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { comparisonData, COLORS } from "@/lib/data";
+import { COLORS } from "@/lib/data";
+import { useData } from "@/contexts/DataContext";
+import EditButton from "@/components/EditButton";
 import { ChevronDown, Trophy, Minus } from "lucide-react";
 
 function WinnerBadge({ winner }: { winner: "leadong" | "globalso" | "tie" }) {
@@ -26,7 +28,7 @@ function WinnerBadge({ winner }: { winner: "leadong" | "globalso" | "tie" }) {
 }
 
 function CategoryCard({ category, icon, items, index }: {
-  category: string; icon: string; items: typeof comparisonData[0]["items"]; index: number;
+  category: string; icon: string; items: { name: string; leadong: string; globalso: string; winner: "leadong" | "globalso" | "tie"; note: string }[]; index: number;
 }) {
   const [isOpen, setIsOpen] = useState(index < 3);
   const { ref, isVisible } = useScrollAnimation(0.1);
@@ -121,6 +123,7 @@ function CategoryCard({ category, icon, items, index }: {
 
 export default function ComparisonSection() {
   const { ref, isVisible } = useScrollAnimation();
+  const { comparisonData } = useData();
 
   return (
     <section className="py-24 relative">
@@ -132,14 +135,19 @@ export default function ComparisonSection() {
           transition={{ duration: 0.7 }}
           className="mb-16"
         >
-          <p className="text-xs tracking-[0.25em] uppercase text-[#8B7355] mb-3 font-semibold">Chapter 03</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E] mb-4" style={{ fontFamily: "'Noto Serif SC', serif" }}>
-            八大维度逐项对比
-          </h2>
-          <div className="w-16 h-0.5 bg-gradient-to-r from-[#D4782A] to-[#2980B9] mb-4" />
-          <p className="text-[#6B6B6B] max-w-2xl">
-            点击各维度卡片展开查看详细对比数据，胜出方以品牌色高亮显示
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs tracking-[0.25em] uppercase text-[#8B7355] mb-3 font-semibold">Chapter 03</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E] mb-4" style={{ fontFamily: "'Noto Serif SC', serif" }}>
+                八大维度逐项对比
+              </h2>
+              <div className="w-16 h-0.5 bg-gradient-to-r from-[#D4782A] to-[#2980B9] mb-4" />
+              <p className="text-[#6B6B6B] max-w-2xl">
+                点击各维度卡片展开查看详细对比数据，胜出方以品牌色高亮显示
+              </p>
+            </div>
+            <EditButton section="comparison" label="编辑对比" />
+          </div>
         </motion.div>
 
         <div className="space-y-4">

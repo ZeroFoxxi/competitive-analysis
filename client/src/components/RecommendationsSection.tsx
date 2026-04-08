@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { recommendations } from "@/lib/data";
+import { useData } from "@/contexts/DataContext";
 import { ArrowUpRight, AlertCircle, Clock } from "lucide-react";
 
 const priorityConfig = {
@@ -11,6 +11,7 @@ const priorityConfig = {
 
 export default function RecommendationsSection() {
   const { ref, isVisible } = useScrollAnimation();
+  const { recommendations } = useData();
 
   return (
     <section className="py-24 relative overflow-hidden">

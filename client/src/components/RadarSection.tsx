@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { radarData, COLORS, winRateData } from "@/lib/data";
+import { COLORS } from "@/lib/data";
+import { useData } from "@/contexts/DataContext";
+import EditButton from "@/components/EditButton";
 import {
   Radar,
   RadarChart,
@@ -14,6 +16,7 @@ import {
 
 export default function RadarSection() {
   const { ref, isVisible } = useScrollAnimation();
+  const { radarData, winRateData } = useData();
 
   const chartData = radarData.dimensions.map((dim, i) => ({
     dimension: dim,
@@ -34,15 +37,19 @@ export default function RadarSection() {
           transition={{ duration: 0.7 }}
           className="mb-16"
         >
-          <p className="text-xs tracking-[0.25em] uppercase text-[#8B7355] mb-3 font-semibold">Chapter 02</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E] mb-4" style={{ fontFamily: "'Noto Serif SC', serif" }}>
-            综合能力雷达图
-          </h2>
-          <div className="w-16 h-0.5 bg-gradient-to-r from-[#D4782A] to-[#2980B9]" />
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs tracking-[0.25em] uppercase text-[#8B7355] mb-3 font-semibold">Chapter 02</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E] mb-4" style={{ fontFamily: "'Noto Serif SC', serif" }}>
+                综合能力雷达图
+              </h2>
+              <div className="w-16 h-0.5 bg-gradient-to-r from-[#D4782A] to-[#2980B9]" />
+            </div>
+            <EditButton section="radar" label="编辑评分" />
+          </div>
         </motion.div>
 
         <div className="grid lg:grid-cols-5 gap-8 items-center">
-          {/* Radar chart */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={isVisible ? { opacity: 1, scale: 1 } : {}}
@@ -89,14 +96,12 @@ export default function RadarSection() {
             </ResponsiveContainer>
           </motion.div>
 
-          {/* Score summary */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isVisible ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.4 }}
             className="lg:col-span-2 space-y-6"
           >
-            {/* Average scores */}
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-[#E8DFD0]/50">
               <h4 className="text-sm font-semibold text-[#8B7355] mb-4 tracking-wide">综合评分</h4>
               <div className="space-y-4">
@@ -133,7 +138,6 @@ export default function RadarSection() {
               </div>
             </div>
 
-            {/* Win rate */}
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-sm border border-[#E8DFD0]/50">
               <h4 className="text-sm font-semibold text-[#8B7355] mb-4 tracking-wide">指标胜出统计</h4>
               <div className="text-center mb-4">

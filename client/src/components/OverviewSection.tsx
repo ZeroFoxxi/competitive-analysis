@@ -1,15 +1,17 @@
 import { motion } from "framer-motion";
 import { useScrollAnimation, useCountUp } from "@/hooks/useScrollAnimation";
-import { keyMetrics, COLORS } from "@/lib/data";
-import { TrendingUp, TrendingDown, Equal, Zap } from "lucide-react";
+import { COLORS } from "@/lib/data";
+import { useData } from "@/contexts/DataContext";
+import EditButton from "@/components/EditButton";
+import { TrendingUp, TrendingDown, Zap } from "lucide-react";
 
 function MetricBar({ label, leadong, globalso, unit, delay }: {
   label: string; leadong: number; globalso: number; unit: string; delay: number;
 }) {
   const { ref, isVisible } = useScrollAnimation(0.2);
   const maxVal = Math.max(leadong, globalso);
-  const leadongPct = (leadong / maxVal) * 100;
-  const globalsoPct = (globalso / maxVal) * 100;
+  const leadongPct = maxVal > 0 ? (leadong / maxVal) * 100 : 50;
+  const globalsoPct = maxVal > 0 ? (globalso / maxVal) * 100 : 50;
   const leadongCount = useCountUp(leadong, 1800, 0, isVisible);
   const globalsoCount = useCountUp(globalso, 1800, 0, isVisible);
 
@@ -55,6 +57,12 @@ function MetricBar({ label, leadong, globalso, unit, delay }: {
 
 export default function OverviewSection() {
   const { ref, isVisible } = useScrollAnimation();
+  const { companies, keyMetrics } = useData();
+
+  const formatPrice = (price: number) => {
+    if (price >= 10000) return (price / 10000).toFixed(1);
+    return price.toLocaleString();
+  };
 
   return (
     <section className="py-24 relative">
@@ -67,35 +75,39 @@ export default function OverviewSection() {
           transition={{ duration: 0.7 }}
           className="mb-16"
         >
-          <p className="text-xs tracking-[0.25em] uppercase text-[#8B7355] mb-3 font-semibold">Chapter 01</p>
-          <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E] mb-4" style={{ fontFamily: "'Noto Serif SC', serif" }}>
-            核心指标概览
-          </h2>
-          <div className="w-16 h-0.5 bg-gradient-to-r from-[#D4782A] to-[#2980B9]" />
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs tracking-[0.25em] uppercase text-[#8B7355] mb-3 font-semibold">Chapter 01</p>
+              <h2 className="text-3xl sm:text-4xl font-bold text-[#1A1A2E] mb-4" style={{ fontFamily: "'Noto Serif SC', serif" }}>
+                核心指标概览
+              </h2>
+              <div className="w-16 h-0.5 bg-gradient-to-r from-[#D4782A] to-[#2980B9]" />
+            </div>
+            <div className="flex gap-2">
+              <EditButton section="overview" label="编辑信息" />
+              <EditButton section="metrics" label="编辑指标" />
+            </div>
+          </div>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           {/* Left: VS visual + company cards */}
           <div>
-            {/* CSS-based VS visual replacing the CDN image */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isVisible ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="rounded-2xl overflow-hidden mb-8 shadow-lg relative h-56"
             >
-              {/* Gradient background */}
               <div className="absolute inset-0 bg-gradient-to-r from-[#D4782A]/10 via-[#F8F5F0] to-[#2980B9]/10" />
-              {/* Decorative circles */}
               <div className="absolute -left-8 -top-8 w-40 h-40 rounded-full bg-[#D4782A]/8 blur-2xl" />
               <div className="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-[#2980B9]/8 blur-2xl" />
-              {/* VS content */}
               <div className="relative z-10 h-full flex items-center justify-center gap-6">
                 <div className="text-center">
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#D4782A] to-[#E8A04C] flex items-center justify-center mb-3 mx-auto shadow-md">
                     <TrendingUp size={28} className="text-white" />
                   </div>
-                  <p className="text-sm font-bold text-[#D4782A]">领动臻选版</p>
+                  <p className="text-sm font-bold text-[#D4782A]">{companies.leadong.name}</p>
                   <p className="text-xs text-[#8B7355] mt-1">深度服务型</p>
                 </div>
                 <div className="flex flex-col items-center gap-2">
@@ -108,14 +120,13 @@ export default function OverviewSection() {
                   <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2980B9] to-[#5DADE2] flex items-center justify-center mb-3 mx-auto shadow-md">
                     <TrendingDown size={28} className="text-white" />
                   </div>
-                  <p className="text-sm font-bold text-[#2980B9]">全球搜 SEO Plus</p>
+                  <p className="text-sm font-bold text-[#2980B9]">{companies.globalso.name}</p>
                   <p className="text-xs text-[#8B7355] mt-1">技术工具型</p>
                 </div>
               </div>
             </motion.div>
 
             <div className="grid grid-cols-2 gap-4">
-              {/* Leadong card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -123,12 +134,14 @@ export default function OverviewSection() {
                 className="p-5 rounded-xl border-2 border-[#D4782A]/20 bg-[#FFF8F0]"
               >
                 <div className="w-8 h-1 rounded-full bg-[#D4782A] mb-3" />
-                <h3 className="font-bold text-[#1A1A2E] text-lg mb-1">领动</h3>
-                <p className="text-xs text-[#6B6B6B] mb-3">臻选版</p>
-                <p className="text-2xl font-bold text-[#D4782A]">22.8<span className="text-sm font-normal text-[#8B7355]">万/年</span></p>
+                <h3 className="font-bold text-[#1A1A2E] text-lg mb-1">{companies.leadong.name}</h3>
+                <p className="text-xs text-[#6B6B6B] mb-3">{companies.leadong.product}</p>
+                <p className="text-2xl font-bold text-[#D4782A]">
+                  {formatPrice(companies.leadong.price)}
+                  <span className="text-sm font-normal text-[#8B7355]">万/年</span>
+                </p>
               </motion.div>
 
-              {/* Globalso card */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={isVisible ? { opacity: 1, y: 0 } : {}}
@@ -136,9 +149,12 @@ export default function OverviewSection() {
                 className="p-5 rounded-xl border-2 border-[#2980B9]/20 bg-[#F0F7FC]"
               >
                 <div className="w-8 h-1 rounded-full bg-[#2980B9] mb-3" />
-                <h3 className="font-bold text-[#1A1A2E] text-lg mb-1">全球搜</h3>
-                <p className="text-xs text-[#6B6B6B] mb-3">SEO Plus</p>
-                <p className="text-2xl font-bold text-[#2980B9]">19.8<span className="text-sm font-normal text-[#8B7355]">万/年</span></p>
+                <h3 className="font-bold text-[#1A1A2E] text-lg mb-1">{companies.globalso.name}</h3>
+                <p className="text-xs text-[#6B6B6B] mb-3">{companies.globalso.product}</p>
+                <p className="text-2xl font-bold text-[#2980B9]">
+                  {formatPrice(companies.globalso.price)}
+                  <span className="text-sm font-normal text-[#8B7355]">万/年</span>
+                </p>
               </motion.div>
             </div>
           </div>
@@ -151,11 +167,11 @@ export default function OverviewSection() {
             <div className="flex items-center gap-6 mb-6 text-xs">
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS.leadong }} />
-                <span className="text-[#6B6B6B]">领动臻选版</span>
+                <span className="text-[#6B6B6B]">{companies.leadong.name}</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: COLORS.globalso }} />
-                <span className="text-[#6B6B6B]">全球搜 SEO Plus</span>
+                <span className="text-[#6B6B6B]">{companies.globalso.name}</span>
               </div>
             </div>
             {keyMetrics.map((m, i) => (

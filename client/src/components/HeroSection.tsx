@@ -1,7 +1,13 @@
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
+import { useData } from "@/contexts/DataContext";
 
 export default function HeroSection() {
+  const { companies, comparisonData, winRateData } = useData();
+  const totalItems = winRateData.total;
+  const totalDimensions = comparisonData.length;
+  const priceTag = `${(companies.leadong.price / 10000).toFixed(1)}万 vs ${(companies.globalso.price / 10000).toFixed(1)}万 元/年`;
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Pure CSS background - no CDN images */}
@@ -80,7 +86,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.7 }}
           className="flex flex-wrap justify-center gap-4"
         >
-          {["228,000 vs 198,000 元/年", "46项指标对比", "8大分析维度"].map((tag, i) => (
+          {[priceTag, `${totalItems}项指标对比`, `${totalDimensions}大分析维度`].map((tag, i) => (
             <span
               key={i}
               className="px-5 py-2 rounded-full text-sm font-medium border border-[#D4C5A9]/60 text-[#6B5B3E] bg-[#F8F5F0]/80 backdrop-blur-sm"

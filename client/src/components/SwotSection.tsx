@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { swotData, COLORS } from "@/lib/data";
+import { COLORS } from "@/lib/data";
+import { useData } from "@/contexts/DataContext";
+import EditButton from "@/components/EditButton";
 import { Shield, AlertTriangle, Lightbulb, Zap } from "lucide-react";
 
 const swotConfig = [
@@ -14,6 +16,7 @@ const swotConfig = [
 export default function SwotSection() {
   const { ref, isVisible } = useScrollAnimation();
   const [activeCompany, setActiveCompany] = useState<"leadong" | "globalso">("leadong");
+  const { swotData } = useData();
   const data = swotData[activeCompany];
 
   return (
@@ -38,6 +41,10 @@ export default function SwotSection() {
           </h2>
           <div className="w-16 h-0.5 bg-gradient-to-r from-[#D4782A] to-[#2980B9]" />
         </motion.div>
+
+        <div className="flex justify-end mb-4">
+          <EditButton section="swot" label="编辑SWOT" />
+        </div>
 
         {/* Company toggle */}
         <motion.div

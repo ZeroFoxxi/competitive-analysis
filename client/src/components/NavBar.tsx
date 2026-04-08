@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Pencil } from "lucide-react";
+import { useData } from "@/contexts/DataContext";
 
 const navItems = [
   { label: "概览", href: "#overview" },
@@ -14,6 +15,7 @@ const navItems = [
 export default function NavBar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { setEditPanelOpen, setEditSection, hasChanges } = useData();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 80);
@@ -63,6 +65,18 @@ export default function NavBar() {
                 {item.label}
               </button>
             ))}
+            <button
+              onClick={() => { setEditSection("overview"); setEditPanelOpen(true); }}
+              className={`ml-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${
+                hasChanges
+                  ? "bg-[#D4782A] text-white hover:bg-[#B8621F]"
+                  : scrolled
+                  ? "text-[#D4782A] hover:bg-[#FFF8F0] border border-[#D4782A]/30"
+                  : "text-[#D4782A] hover:bg-[#FFF8F0]/50 border border-[#D4782A]/20"
+              }`}
+            >
+              <Pencil size={14} /> 编辑数据
+            </button>
           </div>
 
           {/* Mobile menu button */}
