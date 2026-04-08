@@ -21,10 +21,19 @@ import { useData } from "@/contexts/DataContext";
 import { Pencil, MessageSquare } from "lucide-react";
 
 function FloatingEditButton() {
-  const { setEditPanelOpen, setEditSection, hasChanges, userNotes } = useData();
+  const { setEditPanelOpen, setEditSection, hasChanges, userNotes, pendingRecompute } = useData();
 
   return (
     <div className="fixed bottom-6 right-6 z-40 flex flex-col gap-2">
+      {pendingRecompute && (
+        <button
+          onClick={() => { setEditSection("recompute"); setEditPanelOpen(true); }}
+          className="bg-[#E65100] text-white text-[10px] px-3 py-1.5 rounded-full text-center animate-bounce shadow-lg whitespace-nowrap"
+          title="价格已修改，点击AI重算对比"
+        >
+          ✨ AI重算
+        </button>
+      )}
       {hasChanges && (
         <div className="bg-[#D4782A] text-white text-[10px] px-2 py-1 rounded-full text-center animate-pulse">
           已修改

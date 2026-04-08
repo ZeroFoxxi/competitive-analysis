@@ -159,6 +159,10 @@ interface DataContextType extends DataState {
   derivedRecommendations: ReturnType<typeof deriveRecommendations>;
   derivedInsight: ReturnType<typeof deriveCompetitiveInsight>;
   derivedStrategyCopy: ReturnType<typeof deriveStrategyCopy>;
+
+  // ---- 数据变更提示 ----
+  pendingRecompute: boolean;  // 价格/指标变更后提示用户重算
+  clearPendingRecompute: () => void;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -210,6 +214,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<DataState>(loadState);
   const [isEditPanelOpen, setEditPanelOpen] = useState(false);
   const [editSection, setEditSection] = useState("overview");
+  const [pendingRecompute, setPendingRecompute] = useState(false);
 
   // Persist to localStorage
   useEffect(() => {
@@ -521,6 +526,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         derivedRecommendations,
         derivedInsight,
         derivedStrategyCopy,
+        // 数据变更提示
+        pendingRecompute,
+        clearPendingRecompute: () => setPendingRecompute(false),
       }}
     >
       {children}

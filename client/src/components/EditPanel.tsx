@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useData } from "@/contexts/DataContext";
+import DocumentUploadPanel from "@/components/DocumentUploadPanel";
+import RecomputePanel from "@/components/RecomputePanel";
 import {
   Sheet,
   SheetContent,
@@ -18,6 +20,8 @@ const sectionTabs = [
   { id: "comparison", label: "对比详情" },
   { id: "swot", label: "SWOT分析" },
   { id: "notes", label: "补充备注" },
+  { id: "upload", label: "📄 上传文档" },
+  { id: "recompute", label: "✨ AI重算" },
 ];
 
 export default function EditPanel() {
@@ -82,6 +86,27 @@ export default function EditPanel() {
             {editSection === "comparison" && <ComparisonEditor />}
             {editSection === "swot" && <SwotEditor />}
             {editSection === "notes" && <NotesEditor />}
+            {editSection === "upload" && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertCircle size={14} className="text-[#D4782A]" />
+                  <p className="text-xs text-[#8B7355]">上传竞品方案文档，AI自动提取数据并填充到报告</p>
+                </div>
+                <DocumentUploadPanel targetCompany="leadong" onClose={() => {}} />
+              </div>
+            )}
+            {editSection === "recompute" && (
+              <div className="space-y-4">
+                {data.pendingRecompute && (
+                  <div className="flex items-center gap-2 p-3 rounded-xl bg-[#FFF3E0] border border-[#FFB74D] animate-pulse">
+                    <AlertCircle size={14} className="text-[#E65100] flex-shrink-0" />
+                    <p className="text-xs text-[#E65100] font-semibold">检测到价格或指标已修改，建议重算对比分析</p>
+                    <button onClick={data.clearPendingRecompute} className="ml-auto text-[10px] text-[#8B7355] underline">忽略</button>
+                  </div>
+                )}
+                <RecomputePanel />
+              </div>
+            )}
           </div>
         </ScrollArea>
       </SheetContent>
