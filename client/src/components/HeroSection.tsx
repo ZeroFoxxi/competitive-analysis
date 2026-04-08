@@ -1,0 +1,107 @@
+import { motion } from "framer-motion";
+import { IMAGES } from "@/lib/data";
+import { ArrowDown } from "lucide-react";
+
+export default function HeroSection() {
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background image */}
+      <div className="absolute inset-0">
+        <img
+          src={IMAGES.hero}
+          alt=""
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#F8F5F0]/60 via-[#F8F5F0]/40 to-[#F8F5F0]/90" />
+      </div>
+
+      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <p className="text-sm tracking-[0.3em] uppercase text-[#8B7355] mb-6 font-medium" style={{ fontFamily: "'Source Sans 3', sans-serif" }}>
+            Competitive Analysis Report · 2026
+          </p>
+        </motion.div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.15, ease: "easeOut" }}
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8 text-[#1A1A2E]"
+          style={{ fontFamily: "'Noto Serif SC', 'Playfair Display', serif" }}
+        >
+          外贸营销服务
+          <br />
+          <span className="bg-gradient-to-r from-[#D4782A] to-[#2980B9] bg-clip-text text-transparent">
+            竞品深度分析
+          </span>
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
+          className="flex items-center justify-center gap-8 mb-10"
+        >
+          <div className="flex items-center gap-3">
+            <div className="w-3 h-3 rounded-full bg-[#D4782A]" />
+            <span className="text-lg text-[#4A4A4A] font-medium">领动臻选版</span>
+          </div>
+          <span className="text-2xl font-light text-[#BFAE96]">vs</span>
+          <div className="flex items-center gap-3">
+            <div className="w-3 h-3 rounded-full bg-[#2980B9]" />
+            <span className="text-lg text-[#4A4A4A] font-medium">全球搜 SEO Plus</span>
+          </div>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.45, ease: "easeOut" }}
+          className="text-lg text-[#6B6B6B] max-w-2xl mx-auto leading-relaxed mb-12"
+          style={{ fontFamily: "'Source Sans 3', 'Noto Sans SC', sans-serif" }}
+        >
+          基于8大维度、46项指标的全方位对比分析，
+          <br className="hidden sm:block" />
+          为您的外贸独立站运营决策提供数据支撑
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.7 }}
+          className="flex flex-wrap justify-center gap-4"
+        >
+          {["228,000 vs 198,000 元/年", "46项指标对比", "8大分析维度"].map((tag, i) => (
+            <span
+              key={i}
+              className="px-5 py-2 rounded-full text-sm font-medium border border-[#D4C5A9]/60 text-[#6B5B3E] bg-[#F8F5F0]/80 backdrop-blur-sm"
+            >
+              {tag}
+            </span>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          className="flex flex-col items-center gap-2 text-[#8B7355]"
+        >
+          <span className="text-xs tracking-widest uppercase">向下滚动</span>
+          <ArrowDown size={18} />
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}

@@ -1,25 +1,54 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
-
 /**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
+ * 外贸营销型网站运营服务竞品分析报告
+ * Design: Business Insight Magazine style
+ * Color: Warm cream base, Leadong amber-orange, Globalso steel-blue
+ * Typography: Playfair Display + Noto Serif SC for headings, Source Sans 3 + Noto Sans SC for body
  */
-export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
 
+import NavBar from "@/components/NavBar";
+import HeroSection from "@/components/HeroSection";
+import OverviewSection from "@/components/OverviewSection";
+import RadarSection from "@/components/RadarSection";
+import ComparisonSection from "@/components/ComparisonSection";
+import SwotSection from "@/components/SwotSection";
+import RecommendationsSection from "@/components/RecommendationsSection";
+import AnalysisToolSection from "@/components/AnalysisToolSection";
+import Footer from "@/components/Footer";
+
+export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
+    <div className="min-h-screen bg-[#F8F5F0]">
+      <NavBar />
+
+      <div id="hero">
+        <HeroSection />
+      </div>
+
+      <div id="overview">
+        <OverviewSection />
+      </div>
+
+      <div id="radar">
+        <RadarSection />
+      </div>
+
+      <div id="comparison">
+        <ComparisonSection />
+      </div>
+
+      <div id="swot">
+        <SwotSection />
+      </div>
+
+      <div id="recommendations">
+        <RecommendationsSection />
+      </div>
+
+      <div id="tool">
+        <AnalysisToolSection />
+      </div>
+
+      <Footer />
     </div>
   );
 }
