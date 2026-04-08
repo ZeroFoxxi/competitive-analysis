@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { useScrollAnimation, useCountUp } from "@/hooks/useScrollAnimation";
-import { keyMetrics, IMAGES, COLORS } from "@/lib/data";
+import { keyMetrics, COLORS } from "@/lib/data";
+import { TrendingUp, TrendingDown, Equal, Zap } from "lucide-react";
 
 function MetricBar({ label, leadong, globalso, unit, delay }: {
   label: string; leadong: number; globalso: number; unit: string; delay: number;
@@ -74,15 +75,43 @@ export default function OverviewSection() {
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Left: VS image + company cards */}
+          {/* Left: VS visual + company cards */}
           <div>
+            {/* CSS-based VS visual replacing the CDN image */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={isVisible ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="rounded-2xl overflow-hidden mb-8 shadow-lg"
+              className="rounded-2xl overflow-hidden mb-8 shadow-lg relative h-56"
             >
-              <img src={IMAGES.vsBattle} alt="竞品对比" className="w-full h-56 object-cover" />
+              {/* Gradient background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#D4782A]/10 via-[#F8F5F0] to-[#2980B9]/10" />
+              {/* Decorative circles */}
+              <div className="absolute -left-8 -top-8 w-40 h-40 rounded-full bg-[#D4782A]/8 blur-2xl" />
+              <div className="absolute -right-8 -bottom-8 w-40 h-40 rounded-full bg-[#2980B9]/8 blur-2xl" />
+              {/* VS content */}
+              <div className="relative z-10 h-full flex items-center justify-center gap-6">
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#D4782A] to-[#E8A04C] flex items-center justify-center mb-3 mx-auto shadow-md">
+                    <TrendingUp size={28} className="text-white" />
+                  </div>
+                  <p className="text-sm font-bold text-[#D4782A]">领动臻选版</p>
+                  <p className="text-xs text-[#8B7355] mt-1">深度服务型</p>
+                </div>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[#1A1A2E] to-[#2C3E50] flex items-center justify-center shadow-lg">
+                    <Zap size={22} className="text-[#F5C88A]" />
+                  </div>
+                  <span className="text-xs font-bold text-[#8B7355] tracking-wider">VS</span>
+                </div>
+                <div className="text-center">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#2980B9] to-[#5DADE2] flex items-center justify-center mb-3 mx-auto shadow-md">
+                    <TrendingDown size={28} className="text-white" />
+                  </div>
+                  <p className="text-sm font-bold text-[#2980B9]">全球搜 SEO Plus</p>
+                  <p className="text-xs text-[#8B7355] mt-1">技术工具型</p>
+                </div>
+              </div>
             </motion.div>
 
             <div className="grid grid-cols-2 gap-4">

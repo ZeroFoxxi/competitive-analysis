@@ -1,18 +1,23 @@
 import { motion } from "framer-motion";
-import { IMAGES } from "@/lib/data";
 import { ArrowDown } from "lucide-react";
 
 export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <img
-          src={IMAGES.hero}
-          alt=""
-          className="w-full h-full object-cover"
+      {/* Pure CSS background - no CDN images */}
+      <div className="absolute inset-0 bg-[#F8F5F0]">
+        {/* Warm gradient orbs */}
+        <div className="absolute top-[-10%] right-[-5%] w-[60vw] h-[60vw] rounded-full bg-gradient-to-br from-[#D4782A]/12 to-[#E8A04C]/8 blur-3xl" />
+        <div className="absolute bottom-[-15%] left-[-10%] w-[50vw] h-[50vw] rounded-full bg-gradient-to-tr from-[#2980B9]/10 to-[#5DADE2]/6 blur-3xl" />
+        <div className="absolute top-[30%] left-[20%] w-[30vw] h-[30vw] rounded-full bg-gradient-to-br from-[#D4C5A9]/15 to-transparent blur-2xl" />
+        {/* Subtle grid pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(26,26,46,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(26,26,46,0.3) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px',
+          }}
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#F8F5F0]/60 via-[#F8F5F0]/40 to-[#F8F5F0]/90" />
       </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">

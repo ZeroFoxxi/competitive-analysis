@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { swotData, COLORS, IMAGES } from "@/lib/data";
+import { swotData, COLORS } from "@/lib/data";
 import { Shield, AlertTriangle, Lightbulb, Zap } from "lucide-react";
 
 const swotConfig = [
@@ -18,9 +18,10 @@ export default function SwotSection() {
 
   return (
     <section className="py-24 bg-gradient-to-b from-white to-[#F8F5F0] relative overflow-hidden">
-      {/* Background decoration */}
+      {/* CSS background decoration replacing CDN image */}
       <div className="absolute right-0 top-0 w-1/3 h-full opacity-[0.06]">
-        <img src={IMAGES.dataInsight} alt="" className="w-full h-full object-cover" />
+        <div className="absolute top-[10%] right-[10%] w-48 h-48 rounded-full bg-gradient-to-br from-[#2980B9] to-[#5DADE2] blur-3xl" />
+        <div className="absolute bottom-[20%] right-[20%] w-32 h-32 rounded-full bg-gradient-to-br from-[#D4782A] to-[#E8A04C] blur-2xl" />
       </div>
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">

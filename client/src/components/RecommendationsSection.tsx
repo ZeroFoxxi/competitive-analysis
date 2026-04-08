@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { recommendations, IMAGES } from "@/lib/data";
+import { recommendations } from "@/lib/data";
 import { ArrowUpRight, AlertCircle, Clock } from "lucide-react";
 
 const priorityConfig = {
@@ -14,9 +14,15 @@ export default function RecommendationsSection() {
 
   return (
     <section className="py-24 relative overflow-hidden">
-      {/* Background */}
+      {/* CSS background decoration replacing CDN image */}
       <div className="absolute inset-0 opacity-[0.04]">
-        <img src={IMAGES.strategy} alt="" className="w-full h-full object-cover" />
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#D4782A]/20 via-transparent to-[#2980B9]/20" />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `radial-gradient(circle at 20% 50%, rgba(212,120,42,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(41,128,185,0.15) 0%, transparent 50%)`,
+          }}
+        />
       </div>
 
       <div className="max-w-6xl mx-auto px-6 relative z-10">
