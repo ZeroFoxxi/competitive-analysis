@@ -12,6 +12,8 @@ import RadarSection from "@/components/RadarSection";
 import ComparisonSection from "@/components/ComparisonSection";
 import SwotSection from "@/components/SwotSection";
 import RecommendationsSection from "@/components/RecommendationsSection";
+import CompetitorMatrixSection from "@/components/CompetitorMatrixSection";
+import HistorySection from "@/components/HistorySection";
 import AnalysisToolSection from "@/components/AnalysisToolSection";
 import Footer from "@/components/Footer";
 import EditPanel from "@/components/EditPanel";
@@ -83,6 +85,16 @@ export default function Home() {
 
       <div id="recommendations">
         <RecommendationsSection />
+      </div>
+
+      {/* 新功能：多竞品对比矩阵 */}
+      <div id="matrix">
+        <CompetitorMatrixSection />
+      </div>
+
+      {/* 新功能：历史版本追踪 */}
+      <div id="history">
+        <HistorySection />
       </div>
 
       <div id="tool">
