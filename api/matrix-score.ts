@@ -73,7 +73,7 @@ ${dimList}
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4.1-mini",
+      model: "qwen-plus",
       messages: [
         { role: "system", content: "你是专业竞品分析师，只输出JSON，不要任何解释文字。" },
         { role: "user", content: prompt },

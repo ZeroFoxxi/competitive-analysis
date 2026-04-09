@@ -95,7 +95,7 @@ ${swotSummary}
 4. 语言专业、简洁、有洞察力`;
 
     const completion = await client.chat.completions.create({
-      model: "gpt-4.1-mini",
+      model: "qwen-plus",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
       response_format: { type: "json_object" },

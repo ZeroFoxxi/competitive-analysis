@@ -93,7 +93,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           : "";
 
       const completion = await openai.chat.completions.create({
-        model: "gpt-4.1-mini",
+        model: "qwen-plus",
         messages: [
           {
             role: "system",
