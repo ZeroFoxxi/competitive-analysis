@@ -132,6 +132,11 @@ interface DataContextType extends DataState {
   updateSwotItem: (company: "leadong" | "globalso", quadrant: string, idx: number, text: string) => void;
   addSwotItem: (company: "leadong" | "globalso", quadrant: string, text: string) => void;
   removeSwotItem: (company: "leadong" | "globalso", quadrant: string, idx: number) => void;
+  // Batch replace entire SWOT quadrant (used by AI generation)
+  updateSwot: (company: "leadong" | "globalso", quadrant: "strengths" | "weaknesses" | "opportunities" | "threats", items: string[]) => void;
+  // AI-generated strategy (null = not yet generated, use rule-based fallback)
+  aiStrategy: AiStrategy | null;
+  setAiStrategy: (strategy: AiStrategy | null) => void;
   // User notes
   addNote: (sectionId: string, itemId: string, text: string) => void;
   removeNote: (idx: number) => void;
@@ -167,6 +172,19 @@ interface DataContextType extends DataState {
   // ---- 数据变更提示 ----
   pendingRecompute: boolean;  // 价格/指标变更后提示用户重算
   clearPendingRecompute: () => void;
+}
+
+export interface AiStrategy {
+  overallStatus: "领先" | "持平" | "落后";
+  overallScore: number;
+  strategySummary: string;
+  strategyDetail: string;
+  recommendations: Array<{
+    priority: "高" | "中" | "低";
+    area: string;
+    title: string;
+    detail: string;
+  }>;
 }
 
 const DataContext = createContext<DataContextType | null>(null);
@@ -219,6 +237,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [isEditPanelOpen, setEditPanelOpen] = useState(false);
   const [editSection, setEditSection] = useState("overview");
   const [pendingRecompute, setPendingRecompute] = useState(false);
+  const [aiStrategy, setAiStrategy] = useState<AiStrategy | null>(null);
 
   // Persist to localStorage
   useEffect(() => {
@@ -337,6 +356,14 @@ export function DataProvider({ children }: { children: ReactNode }) {
     setState((prev) => {
       const newSwot = deepClone(prev.swotData);
       (newSwot[company] as any)[quadrant].splice(idx, 1);
+      return { ...prev, swotData: newSwot };
+    });
+  }, []);
+
+  const updateSwot = useCallback((company: "leadong" | "globalso", quadrant: "strengths" | "weaknesses" | "opportunities" | "threats", items: string[]) => {
+    setState((prev) => {
+      const newSwot = deepClone(prev.swotData);
+      newSwot[company][quadrant] = items;
       return { ...prev, swotData: newSwot };
     });
   }, []);
@@ -513,6 +540,9 @@ export function DataProvider({ children }: { children: ReactNode }) {
         updateSwotItem,
         addSwotItem,
         removeSwotItem,
+        updateSwot,
+        aiStrategy,
+        setAiStrategy,
         addNote,
         removeNote,
         resetAll,
