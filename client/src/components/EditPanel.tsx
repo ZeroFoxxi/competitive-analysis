@@ -14,14 +14,14 @@ import { Pencil, RotateCcw, Plus, Trash2, Save, MessageSquarePlus, ChevronDown, 
 import { COLORS } from "@/lib/data";
 
 const sectionTabs = [
-  { id: "overview", label: "基本信息 & 价格" },
-  { id: "metrics", label: "核心指标" },
-  { id: "radar", label: "雷达图评分" },
-  { id: "comparison", label: "对比详情" },
-  { id: "swot", label: "SWOT分析" },
-  { id: "notes", label: "补充备注" },
-  { id: "upload", label: "📄 上传文档" },
-  { id: "recompute", label: "✨ AI重算" },
+  { id: "overview", label: "基本信息 & 价格", type: "data" },
+  { id: "metrics", label: "核心指标", type: "data" },
+  { id: "radar", label: "雷达图评分", type: "data" },
+  { id: "comparison", label: "对比详情", type: "data" },
+  { id: "swot", label: "SWOT分析", type: "data" },
+  { id: "notes", label: "补充备注", type: "data" },
+  { id: "upload", label: "📄 上传文档", type: "ai" },
+  { id: "recompute", label: "✨ AI重算", type: "ai" },
 ];
 
 export default function EditPanel() {
@@ -61,21 +61,41 @@ export default function EditPanel() {
           )}
         </SheetHeader>
 
-        {/* Section tabs */}
-        <div className="flex gap-1 px-4 py-3 border-b border-[#E8DFD0] overflow-x-auto bg-[#FAF7F2]">
-          {sectionTabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setEditSection(tab.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
-                editSection === tab.id
-                  ? "bg-[#1A1A2E] text-white shadow-sm"
-                  : "text-[#6B6B6B] hover:bg-white hover:text-[#1A1A2E]"
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        {/* Section tabs - 两行布局 */}
+        <div className="px-3 py-2 border-b border-[#E8DFD0] bg-[#FAF7F2] space-y-1.5">
+          {/* 数据编辑 Tab 行 */}
+          <div className="flex flex-wrap gap-1">
+            {sectionTabs.filter(t => t.type === "data").map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setEditSection(tab.id)}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                  editSection === tab.id
+                    ? "bg-[#1A1A2E] text-white shadow-sm"
+                    : "text-[#6B6B6B] hover:bg-white hover:text-[#1A1A2E]"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+          {/* AI 功能 Tab 行 */}
+          <div className="flex gap-1 pt-0.5 border-t border-[#E8DFD0]">
+            <span className="text-[10px] text-[#BFAE96] self-center mr-1">AI功能</span>
+            {sectionTabs.filter(t => t.type === "ai").map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setEditSection(tab.id)}
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                  editSection === tab.id
+                    ? "bg-gradient-to-r from-[#D4782A] to-[#E8A050] text-white shadow-sm"
+                    : "text-[#D4782A] bg-[#FFF3E8] hover:bg-[#FFE0C0] hover:text-[#B05A10]"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         <ScrollArea className="h-[calc(100vh-200px)]">
