@@ -1,10 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENAI_BASE_URL || "https://api.openai.com/v1",
-});
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
@@ -12,7 +8,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { companies, comparisonData, radarData, keyMetrics, winRate } = req.body;
+    const { companies, comparisonData, radarData, keyMetrics, winRate, aiConfig } = req.body;
+    const apiKey = aiConfig?.apiKey || process.env.OPENAI_API_KEY;
+    const baseURL = aiConfig?.baseURL || process.env.OPENAI_BASE_URL || undefined;
+    const model = aiConfig?.model || "qwen3-max";
+    const client = new OpenAI({ apiKey, baseURL });
 
     if (!companies || !comparisonData) {
       return res.status(400).json({ error: "Missing required data" });
@@ -87,7 +87,7 @@ ${metricsSummary}
 }`;
 
     const completion = await client.chat.completions.create({
-      model: "qwen3-max",
+      model,
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
       response_format: { type: "json_object" },

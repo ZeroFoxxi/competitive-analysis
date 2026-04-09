@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAIConfig } from "../contexts/AIConfigContext";
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useData } from "@/contexts/DataContext";
@@ -13,6 +14,7 @@ const priorityConfig = {
 
 export default function RecommendationsSection() {
   const { ref, isVisible } = useScrollAnimation();
+  const { getRequestParams } = useAIConfig();
   const {
     derivedRecommendations,
     derivedInsight,
@@ -90,6 +92,7 @@ export default function RecommendationsSection() {
           keyMetrics,
           winRate: winRateData,
           swotData,
+          aiConfig: getRequestParams(),
         }),
       });
 

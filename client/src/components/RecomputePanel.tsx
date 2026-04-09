@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAIConfig } from "../contexts/AIConfigContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "@/contexts/DataContext";
 import {
@@ -47,6 +48,7 @@ export default function RecomputePanel() {
     clearPendingRecompute,
     pendingRecompute,
   } = useData();
+  const { getRequestParams } = useAIConfig();
 
   const [activeTab, setActiveTab] = useState<PanelTab>("report");
 
@@ -90,6 +92,7 @@ export default function RecomputePanel() {
             metrics: metricsMap,
           },
           currentComparison: comparisonData,
+          aiConfig: getRequestParams(),
         }),
       });
       const json = await res.json();
@@ -179,6 +182,7 @@ export default function RecomputePanel() {
         body: JSON.stringify({
           competitors: competitorDescriptions,
           dimensions: dimNames,
+          aiConfig: getRequestParams(),
         }),
       });
       const json = await res.json();

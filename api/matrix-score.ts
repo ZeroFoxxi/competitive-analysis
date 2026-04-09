@@ -1,10 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENAI_BASE_URL || undefined,
-});
 
 interface CompetitorInput {
   id: string;
@@ -19,10 +15,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { competitors, dimensions } = req.body as {
+  const { competitors, dimensions, aiConfig } = req.body as {
     competitors: CompetitorInput[];
     dimensions: string[];
+    aiConfig?: { apiKey?: string; baseURL?: string; model?: string };
   };
+  const apiKey = aiConfig?.apiKey || process.env.OPENAI_API_KEY;
+  const baseURL = aiConfig?.baseURL || process.env.OPENAI_BASE_URL || undefined;
+  const model = aiConfig?.model || "qwen3-max";
+  const openai = new OpenAI({ apiKey, baseURL });
 
   if (!competitors?.length || !dimensions?.length) {
     return res.status(400).json({ error: "缺少竞品或维度数据" });
@@ -73,7 +74,7 @@ ${dimList}
 
   try {
     const completion = await openai.chat.completions.create({
-      model: "qwen3-max",
+      model,
       messages: [
         { role: "system", content: "你是专业竞品分析师，只输出JSON，不要任何解释文字。" },
         { role: "user", content: prompt },

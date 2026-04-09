@@ -3,6 +3,7 @@ import { useData } from "@/contexts/DataContext";
 import DocumentUploadPanel from "@/components/DocumentUploadPanel";
 import RecomputePanel from "@/components/RecomputePanel";
 import ExportPanel from "@/components/ExportPanel";
+import AIConfigPanel from "@/components/AIConfigPanel";
 import {
   Sheet,
   SheetContent,
@@ -24,6 +25,7 @@ const sectionTabs = [
   { id: "upload", label: "📄 上传文档", type: "ai" },
   { id: "recompute", label: "✨ AI重算", type: "ai" },
   { id: "export", label: "📥 导出报告", type: "ai" },
+  { id: "aiconfig", label: "⚙️ AI配置", type: "ai" },
 ];
 
 export default function EditPanel() {
@@ -130,6 +132,15 @@ export default function EditPanel() {
               </div>
             )}
             {editSection === "export" && <ExportPanel />}
+            {editSection === "aiconfig" && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertCircle size={14} className="text-[#D4782A]" />
+                  <p className="text-xs text-[#8B7355]">配置AI服务商、API Key和模型，所有AI功能将使用此配置</p>
+                </div>
+                <AIConfigPanel />
+              </div>
+            )}
           </div>
         </ScrollArea>
       </SheetContent>

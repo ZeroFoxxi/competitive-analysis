@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import { useAIConfig } from "../contexts/AIConfigContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { useData } from "@/contexts/DataContext";
 import {
@@ -74,6 +75,7 @@ export default function DocumentUploadPanel({ onClose }: Props) {
     updateMatrixScore,
     addMatrixCompetitor,
   } = useData();
+  const { getRequestParams } = useAIConfig();
 
   const [dragOver, setDragOver] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -119,6 +121,8 @@ export default function DocumentUploadPanel({ onClose }: Props) {
     // 传递矩阵维度名称，让AI推导评分
     const dimNames = competitorMatrix.dimensions.map((d) => d.name);
     formData.append("dimensionNames", JSON.stringify(dimNames));
+    // 传递AI配置
+    formData.append("aiConfig", JSON.stringify(getRequestParams()));
 
     try {
       const res = await fetch("/api/upload-document", {

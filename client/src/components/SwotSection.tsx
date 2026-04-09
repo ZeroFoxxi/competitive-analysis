@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAIConfig } from "../contexts/AIConfigContext";
 import { motion } from "framer-motion";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { COLORS } from "@/lib/data";
@@ -17,6 +18,7 @@ export default function SwotSection() {
   const { ref, isVisible } = useScrollAnimation();
   const [activeCompany, setActiveCompany] = useState<"leadong" | "globalso">("leadong");
   const { swotData, updateSwot, companies, comparisonData, radarData, keyMetrics, winRateData } = useData();
+  const { getRequestParams } = useAIConfig();
   const data = swotData[activeCompany];
 
   const [isGenerating, setIsGenerating] = useState(false);
@@ -45,6 +47,7 @@ export default function SwotSection() {
           radarData: radarArray,
           keyMetrics,
           winRate: winRateData,
+          aiConfig: getRequestParams(),
         }),
       });
 

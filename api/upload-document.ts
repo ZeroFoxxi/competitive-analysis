@@ -9,10 +9,6 @@ export const config = {
   },
 };
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENAI_BASE_URL || undefined,
-});
 
 async function extractText(filePath: string, filename: string): Promise<string> {
   const ext = (filename.split(".").pop() || "").toLowerCase();
@@ -75,6 +71,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       dimensionNames = [];
     }
 
+    // 解析前端传来的AI配置
+    let aiConfig: { apiKey?: string; baseURL?: string; model?: string } = {};
+    try {
+      const rawAI = Array.isArray(fields.aiConfig) ? fields.aiConfig[0] : fields.aiConfig;
+      if (rawAI) aiConfig = JSON.parse(rawAI);
+    } catch {}
+    const apiKey = aiConfig.apiKey || process.env.OPENAI_API_KEY;
+    const baseURL = aiConfig.baseURL || process.env.OPENAI_BASE_URL || undefined;
+    const model = aiConfig.model || "qwen3-max";
+    const openai = new OpenAI({ apiKey, baseURL });
+
     try {
       const text = await extractText(file.filepath, file.originalFilename || "file.txt");
       if (!text || text.trim().length < 30) {
@@ -93,7 +100,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           : "";
 
       const completion = await openai.chat.completions.create({
-        model: "qwen3-max",
+        model,
         messages: [
           {
             role: "system",

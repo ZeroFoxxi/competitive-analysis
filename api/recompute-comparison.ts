@@ -1,18 +1,18 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import OpenAI from "openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-  baseURL: process.env.OPENAI_BASE_URL || undefined,
-});
-
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { leadongData, globalsoData, currentComparison } = req.body;
+    const { leadongData, globalsoData, currentComparison, aiConfig } = req.body;
+    // 优先使用前端传入的配置，否则使用环境变量
+    const apiKey = aiConfig?.apiKey || process.env.OPENAI_API_KEY;
+    const baseURL = aiConfig?.baseURL || process.env.OPENAI_BASE_URL || undefined;
+    const model = aiConfig?.model || "qwen3-max";
+    const openai = new OpenAI({ apiKey, baseURL });
     if (!leadongData || !globalsoData) {
       return res.status(400).json({ error: "缺少竞品数据" });
     }
@@ -35,7 +35,7 @@ ${JSON.stringify((currentComparison || []).slice(0, 4), null, 2)}
 `;
 
     const completion = await openai.chat.completions.create({
-      model: "qwen3-max",
+      model,
       messages: [
         {
           role: "system",
