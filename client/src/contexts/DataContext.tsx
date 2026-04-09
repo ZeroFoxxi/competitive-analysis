@@ -95,6 +95,10 @@ export interface HistorySnapshot {
       globalsoWins: number;
       total: number;
     };
+    // 新增：保存矩阵数据和完整对比数据
+    competitorMatrix?: CompetitorMatrix;
+    comparisonData?: ComparisonCategory[];
+    swotData?: any;
   };
 }
 
@@ -459,6 +463,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
             globalsoWins: prev.winRateData.globalsoWins,
             total: prev.winRateData.total,
           },
+          // 新增：保存矩阵数据、完整对比数据和SWOT
+          competitorMatrix: deepClone(prev.competitorMatrix),
+          comparisonData: deepClone(prev.comparisonData),
+          swotData: deepClone(prev.swotData),
         },
       };
       // 最多保留20个快照
@@ -484,6 +492,10 @@ export function DataProvider({ children }: { children: ReactNode }) {
         keyMetrics: deepClone(snapshot.data.keyMetrics),
         radarData: deepClone(snapshot.data.radarData),
         winRateData: deepClone(snapshot.data.winRateData),
+        // 新增：恢复矩阵数据、对比数据和SWOT（如果快照中有的话）
+        ...(snapshot.data.competitorMatrix ? { competitorMatrix: deepClone(snapshot.data.competitorMatrix) } : {}),
+        ...(snapshot.data.comparisonData ? { comparisonData: deepClone(snapshot.data.comparisonData), winRateData: deriveWinRate(snapshot.data.comparisonData) } : {}),
+        ...(snapshot.data.swotData ? { swotData: deepClone(snapshot.data.swotData) } : {}),
       };
     });
   }, []);

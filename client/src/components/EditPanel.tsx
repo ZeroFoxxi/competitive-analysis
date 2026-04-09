@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useData } from "@/contexts/DataContext";
 import DocumentUploadPanel from "@/components/DocumentUploadPanel";
 import RecomputePanel from "@/components/RecomputePanel";
+import ExportPanel from "@/components/ExportPanel";
 import {
   Sheet,
   SheetContent,
@@ -22,6 +23,7 @@ const sectionTabs = [
   { id: "notes", label: "补充备注", type: "data" },
   { id: "upload", label: "📄 上传文档", type: "ai" },
   { id: "recompute", label: "✨ AI重算", type: "ai" },
+  { id: "export", label: "📥 导出报告", type: "ai" },
 ];
 
 export default function EditPanel() {
@@ -110,9 +112,9 @@ export default function EditPanel() {
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-2">
                   <AlertCircle size={14} className="text-[#D4782A]" />
-                  <p className="text-xs text-[#8B7355]">上传竞品方案文档，AI自动提取数据并填充到报告</p>
+                  <p className="text-xs text-[#8B7355]">上传竞品方案文档，AI自动提取数据并填充到对应竞品</p>
                 </div>
-                <DocumentUploadPanel targetCompany="leadong" onClose={() => {}} />
+                <DocumentUploadPanel />
               </div>
             )}
             {editSection === "recompute" && (
@@ -127,6 +129,7 @@ export default function EditPanel() {
                 <RecomputePanel />
               </div>
             )}
+            {editSection === "export" && <ExportPanel />}
           </div>
         </ScrollArea>
       </SheetContent>
