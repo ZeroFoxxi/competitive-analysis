@@ -87,7 +87,7 @@ ${metricsSummary}
 }`;
 
     const completion = await client.chat.completions.create({
-      model: "qwen-plus",
+      model: "qwen3-max",
       messages: [{ role: "user", content: prompt }],
       temperature: 0.7,
       response_format: { type: "json_object" },

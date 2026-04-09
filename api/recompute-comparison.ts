@@ -35,7 +35,7 @@ ${JSON.stringify((currentComparison || []).slice(0, 4), null, 2)}
 `;
 
     const completion = await openai.chat.completions.create({
-      model: "qwen-plus",
+      model: "qwen3-max",
       messages: [
         {
           role: "system",
