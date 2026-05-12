@@ -96,12 +96,20 @@ export default function RecommendationsSection() {
         }),
       });
 
-      if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error || `HTTP ${response.status}`);
+      // 修复：先读文本再解析JSON
+      const responseText = await response.text();
+      let data: any;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        throw new Error(`服务器返回异常 (HTTP ${response.status})，请稍后重试`);
       }
 
-      const { strategy } = await response.json();
+      if (!response.ok) {
+        throw new Error(data.error || `HTTP ${response.status}`);
+      }
+
+      const { strategy } = data;
       setAiStrategy(strategy as AiStrategy);
       setJustGenerated(true);
       setTimeout(() => setJustGenerated(false), 4000);

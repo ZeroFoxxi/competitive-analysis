@@ -95,7 +95,18 @@ export default function RecomputePanel() {
           aiConfig: getRequestParams(),
         }),
       });
-      const json = await res.json();
+
+      // 修复：先读文本再解析JSON，避免非JSON响应崩溃
+      const responseText = await res.text();
+      let json: any;
+      try {
+        json = JSON.parse(responseText);
+      } catch {
+        setReportStatus("error");
+        setReportError(`服务器返回异常 (HTTP ${res.status})，请稍后重试`);
+        return;
+      }
+
       if (!res.ok || !json.success) {
         setReportStatus("error");
         setReportError(json.error || "重算失败，请重试");
@@ -185,14 +196,25 @@ export default function RecomputePanel() {
           aiConfig: getRequestParams(),
         }),
       });
-      const json = await res.json();
-      if (!res.ok || !json.success) {
+
+      // 修复：先读文本再解析JSON，避免非JSON响应崩溃
+      const responseText2 = await res.text();
+      let json2: any;
+      try {
+        json2 = JSON.parse(responseText2);
+      } catch {
         setMatrixStatus("error");
-        setMatrixError(json.error || "评分失败，请重试");
+        setMatrixError(`服务器返回异常 (HTTP ${res.status})，请稍后重试`);
         return;
       }
-      if (json.data?.length > 0) {
-        setMatrixPreview(json.data);
+
+      if (!res.ok || !json2.success) {
+        setMatrixStatus("error");
+        setMatrixError(json2.error || "评分失败，请重试");
+        return;
+      }
+      if (json2.data?.length > 0) {
+        setMatrixPreview(json2.data);
         setMatrixStatus("success");
       } else {
         setMatrixStatus("error");

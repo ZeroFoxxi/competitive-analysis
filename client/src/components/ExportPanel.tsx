@@ -46,7 +46,18 @@ export default function ExportPanel() {
           winRateData,
         }),
       });
-      const json = await res.json();
+
+      // 修复：先读文本再解析JSON，避免非JSON响应崩溃
+      const responseText = await res.text();
+      let json: any;
+      try {
+        json = JSON.parse(responseText);
+      } catch {
+        setMdStatus("error");
+        setMdError(`服务器返回异常 (HTTP ${res.status})，请稍后重试`);
+        return;
+      }
+
       if (!res.ok || !json.success) {
         setMdStatus("error");
         setMdError(json.error || "导出失败");

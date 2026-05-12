@@ -55,7 +55,17 @@ export default function AIConfigPanel() {
           model: model || "qwen3-max",
         }),
       });
-      const data = await res.json();
+
+      // 修复：先读取文本再解析JSON，避免非JSON响应导致解析错误
+      const responseText = await res.text();
+      let data: any;
+      try {
+        data = JSON.parse(responseText);
+      } catch {
+        setTestResult({ ok: false, msg: `服务器返回异常 (HTTP ${res.status})，请稍后重试` });
+        return;
+      }
+
       if (res.ok && data.ok) {
         setTestResult({ ok: true, msg: `连接成功！模型回复：${data.reply}` });
       } else {

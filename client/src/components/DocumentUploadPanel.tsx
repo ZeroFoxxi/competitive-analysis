@@ -129,8 +129,39 @@ export default function DocumentUploadPanel({ onClose }: Props) {
         method: "POST",
         body: formData,
       });
-      const json = await res.json();
-      if (!res.ok || !json.success) {
+
+      // 修复：先读取文本，再判断状态码和解析JSON，避免 "Unexpected token 'R'..." 错误
+      const responseText = await res.text();
+
+      if (!res.ok) {
+        // HTTP错误（如413 Request Entity Too Large、500等），友好提示
+        let errMsg = `HTTP ${res.status}`;
+        try {
+          const errJson = JSON.parse(responseText);
+          errMsg = errJson.error || errJson.message || errMsg;
+        } catch {
+          // 响应不是JSON格式（如Nginx返回的纯文本错误页）
+          if (res.status === 413) {
+            errMsg = "文件过大，超出服务器限制。请尝试上传较小的文件（建议5MB以内）。";
+          } else {
+            errMsg = `${res.status}: ${responseText.slice(0, 150)}`;
+          }
+        }
+        setStatus("error");
+        setErrorMsg(errMsg);
+        return;
+      }
+
+      let json: any;
+      try {
+        json = JSON.parse(responseText);
+      } catch {
+        setStatus("error");
+        setErrorMsg("服务器返回了无效数据，请重试");
+        return;
+      }
+
+      if (!json.success) {
         setStatus("error");
         setErrorMsg(json.error || "上传失败，请重试");
         return;
